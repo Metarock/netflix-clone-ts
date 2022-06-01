@@ -1,3 +1,19 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* html, body, heading tags, h1. These are the base html tags */
+@layer base {
+  /* target the whole body */
+  body {
+    @apply bg-[#141414] text-white;
+  }
+}
+
+/* To add custom values on tailwindcss use e.x:  text-[value] */
+/* Think of custom classNames */
+@layer components {
+  .headerLink {
+    @apply cursor-pointer text-sm font-light text-[#e5e5e5] transition duration-[.4s] hover:text-[#b3b3b3];
+  }
+}
