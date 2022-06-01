@@ -1,10 +1,34 @@
 import { BellIcon, SearchIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 // Wont need to import react for nextjs
 const Header = () => {
+  // Use States
+  const [isScrolled, setIsScrolled] = useState<boolean>(false)
+
+  // load content at single mount
+  useEffect(() => {
+    const handleScroll = () => {
+      // check if page scroll Y is greater than 0
+      if (window.scrollY > 0) {
+        setIsScrolled(true)
+      } else {
+        setIsScrolled(false)
+      }
+    }
+
+    // Listen to scroll
+    window.addEventListener('scroll', handleScroll)
+
+    return () => {
+      //Remove the event listener
+      window.removeEventListener('scroll', handleScroll)
+    }
+  }, [])
+
   return (
-    <header>
+    <header className={`${isScrolled && 'bg-[#141414]'}`}>
       {/* Left */}
       <div className="flex items-center space-x-2 md:space-x-10">
         {/* svg elements */}
