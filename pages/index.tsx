@@ -65,7 +65,7 @@ const Home = ({
 }: NetFlixProps) => {
   return (
     // gradient to bottom
-    <div className="relative h-screen bg-gradient-to-b from-gray-900/10 to-[#010511] lg:h-[140vh]">
+    <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
       <Head>
         <title>Create Next App</title>
         <link rel="icon" href="/favicon.ico" />
@@ -75,7 +75,7 @@ const Home = ({
       <main className="relative pl-4 pb-24 lg:space-y-24 lg:pl-16">
         {/* Banner coponent*/}
         <Banner netflixOriginals={netflixOriginals} />
-        <section>
+        <section className="md:space-y-24">
           {/* Rows component */}
           <Row title="Trending Now" movies={trendingNow} />
           <Row title="Top Rated" movies={topRated} />

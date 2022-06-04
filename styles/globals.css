@@ -6,7 +6,7 @@
 @layer base {
   /* target the whole body */
   body {
-    @apply bg-[#141414] text-white;
+    @apply bg-[#141414] text-white !scrollbar-thin !scrollbar-track-transparent !scrollbar-thumb-red-600;
   }
 
   /* Because we will be using headers */
