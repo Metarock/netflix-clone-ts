@@ -1,7 +1,9 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Movie } from '../typings'
-import { BASE_URL, MOVIE_BASE_URL } from '../constants/movie'
+import { MOVIE_BASE_URL } from '../constants/movie'
+import { FaPlay } from 'react-icons/fa'
+import { InformationCircleIcon } from '@heroicons/react/solid'
 
 interface BannerProps {
   netflixOriginals: Movie[]
@@ -21,7 +23,7 @@ const Banner = ({ netflixOriginals }: BannerProps) => {
   console.log('net ', netflixOriginals)
 
   return (
-    <div>
+    <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
       <div className="absolute top-0 left-0 -z-10 h-[95vh] w-screen">
         {/* image nextjs compnent */}
         <Image
@@ -30,10 +32,23 @@ const Banner = ({ netflixOriginals }: BannerProps) => {
           objectFit="cover"
         />
       </div>
-      <h1 className="text-2xl lg:text-7xl md:text-4xl">
+      <h1 className="text-2xl lg:text-7xl md:text-4xl font-bold">
         {movie?.title || movie?.name || movie?.original_name}
       </h1>
-      <p>{movie?.overview}</p>
+      <p className="max-w-xs text-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:font-2xl">
+        {movie?.overview}
+      </p>
+
+      <div className="flex space-x-3">
+        <button className="bannerButton bg-white text-black">
+          <FaPlay className="" />
+          Play
+        </button>
+        <button className="bannerButton bg-[gray]/70">
+          <InformationCircleIcon className="h-5 w-5 md:h-8 md:w-8" />
+          More Info
+        </button>
+      </div>
     </div>
   )
 }
