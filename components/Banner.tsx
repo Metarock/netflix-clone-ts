@@ -1,7 +1,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import { Movie } from '../typings'
-import { MOVIE_BASE_URL } from '../constants/movie'
+import { MOVIE_BASE_URL } from '../constants/constants'
 import { FaPlay } from 'react-icons/fa'
 import { InformationCircleIcon } from '@heroicons/react/solid'
 
@@ -9,7 +9,7 @@ interface BannerProps {
   netflixOriginals: Movie[]
 }
 
-const Banner = ({ netflixOriginals }: BannerProps) => {
+const Banner: React.FC<BannerProps> = ({ netflixOriginals }) => {
   const [movie, setMovie] = useState<Movie | null>(null)
 
   // Get a random movie on banner by using the default math
@@ -19,8 +19,6 @@ const Banner = ({ netflixOriginals }: BannerProps) => {
       netflixOriginals[Math.floor(Math.random() * netflixOriginals.length)]
     )
   }, [netflixOriginals])
-
-  console.log('net ', netflixOriginals)
 
   return (
     <div className="flex flex-col space-y-2 py-16 md:space-y-4 lg:h-[65vh] lg:justify-end lg:pb-12">
@@ -35,7 +33,7 @@ const Banner = ({ netflixOriginals }: BannerProps) => {
       <h1 className="text-2xl lg:text-7xl md:text-4xl font-bold">
         {movie?.title || movie?.name || movie?.original_name}
       </h1>
-      <p className="max-w-xs text-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:font-2xl">
+      <p className="max-w-xs text-shadow-md text-xs md:max-w-lg md:text-lg lg:max-w-2xl lg:font-2xl">
         {movie?.overview}
       </p>
 

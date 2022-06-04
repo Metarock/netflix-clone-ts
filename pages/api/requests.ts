@@ -1,4 +1,4 @@
-import { BASE_URL, API_KEY } from '../../constants/movie'
+import { BASE_URL, API_KEY } from '../../constants/constants'
 
 const requests = {
   fetchTrending: `${BASE_URL}/trending/all/week?api_key=${API_KEY}&language=en-US`,
