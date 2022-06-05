@@ -1,7 +1,5 @@
-import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
-import { Row, Banner, Header } from '../components'
+import { Banner, Header, Row } from '../components'
 import { Movie } from '../typings'
 import requests from './api/requests'
 
@@ -67,7 +65,7 @@ const Home = ({
     // gradient to bottom
     <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
       <Head>
-        <title>Create Next App</title>
+        <title>Netflix</title>
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* Header navigation component */}
