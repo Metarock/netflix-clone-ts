@@ -39,6 +39,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [initialLoading, setInitialLoading] = useState<boolean>(true)
   const router = useRouter()
 
+  //   This is to check, on load, whether user is logged in or not
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
