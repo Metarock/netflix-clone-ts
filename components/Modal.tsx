@@ -24,7 +24,8 @@ const Modal = () => {
       //   if (data?.videos) {
       //     const index = data.videos.results.findIndex()
       //   }
-      console.log(data)
+
+      console.log('modal', movie)
     }
     fetchMovies()
   }, [movie])
