@@ -1,5 +1,8 @@
 import Head from 'next/head'
-import { Banner, Header, Row } from '../components'
+import { useRecoilValue } from 'recoil'
+import { modalState } from '../atoms/modalAtom'
+import { Banner, Header, Modal, Row } from '../components'
+import useAuth from '../hooks/useAuth'
 import { Movie } from '../typings'
 import requests from './api/requests'
 
@@ -61,6 +64,12 @@ const Home = ({
   romanceMovies,
   documentaries,
 }: NetFlixProps) => {
+  const { logout, loading } = useAuth()
+
+  const showModal = useRecoilValue(modalState)
+
+  if (loading) return null
+
   return (
     // gradient to bottom
     <div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
@@ -86,6 +95,7 @@ const Home = ({
         </section>
       </main>
       {/* Modal */}
+      {showModal && <Modal />}
     </div>
   )
 }

@@ -2,6 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import { useState } from 'react'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import useAuth from '../hooks/useAuth'
 
 interface InputTypes {
   email: string
@@ -10,6 +11,7 @@ interface InputTypes {
 
 const login = () => {
   const [login, setLogin] = useState<boolean>(false)
+  const { signIn, signUp } = useAuth()
 
   const {
     register,
@@ -22,10 +24,10 @@ const login = () => {
     // if click on login
     if (login) {
       // sign in
-      //   await signIn(email, password)
+      await signIn(email, password)
     } else {
       // sign up
-      //   await signUp(email, password)
+      await signUp(email, password)
     }
   }
 

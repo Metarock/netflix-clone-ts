@@ -4,6 +4,8 @@ import { Movie } from '../typings'
 import { MOVIE_BASE_URL } from '../constants/constants'
 import { FaPlay } from 'react-icons/fa'
 import { InformationCircleIcon } from '@heroicons/react/solid'
+import { useRecoilState } from 'recoil'
+import { modalState, movieState } from '../atoms/modalAtom'
 
 interface BannerProps {
   netflixOriginals: Movie[]
@@ -11,6 +13,8 @@ interface BannerProps {
 
 const Banner: React.FC<BannerProps> = ({ netflixOriginals }) => {
   const [movie, setMovie] = useState<Movie | null>(null)
+  const [showModal, setShowModal] = useRecoilState(modalState)
+  const [currentMovie, setCurrentMovie] = useRecoilState(movieState)
 
   // Get a random movie on banner by using the default math
   // floor and random via the netflix original length
@@ -42,7 +46,13 @@ const Banner: React.FC<BannerProps> = ({ netflixOriginals }) => {
           <FaPlay className="" />
           Play
         </button>
-        <button className="bannerButton bg-[gray]/70">
+        <button
+          className="bannerButton bg-[gray]/70"
+          onClick={() => {
+            setCurrentMovie(movie)
+            setShowModal(true)
+          }}
+        >
           <InformationCircleIcon className="h-5 w-5 md:h-8 md:w-8" />
           More Info
         </button>
