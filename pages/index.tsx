@@ -1,7 +1,7 @@
 import Head from 'next/head'
 import { useRecoilValue } from 'recoil'
 import { modalState } from '../atoms/modalAtom'
-import { Banner, Header, Modal, Row } from '../components'
+import { Banner, Header, Modal, Plans, Row } from '../components'
 import useAuth from '../hooks/useAuth'
 import { Movie } from '../typings'
 import requests from './api/requests'
@@ -67,8 +67,12 @@ const Home = ({
   const { logout, loading } = useAuth()
 
   const showModal = useRecoilValue(modalState)
+  const subscrption = false
 
-  if (loading) return null
+  // Have a subscription that checks authentication
+  if (loading || subscrption === null) return null
+
+  if (!subscrption) return <Plans />
 
   return (
     // gradient to bottom
