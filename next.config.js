@@ -4,6 +4,11 @@ const withTM = require('next-transpile-modules')([
 
 module.exports = withTM({
   reactStrictMode: true,
+  webpack: (config) => {
+    config.experiments = config.experiments || {}
+    config.experiments.topLevelAwait = true
+    return config
+  },
   images: {
     domains: ['rb.gy', 'image.tmdb.org'],
   },
