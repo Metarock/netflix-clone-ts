@@ -3,6 +3,7 @@ import { Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
 import Link from 'next/link'
 import useAuth from '../hooks/useAuth'
+import Table from './Table'
 
 interface PlanProps {
   products: Product[]
@@ -67,6 +68,7 @@ const Plans = ({ products }: PlanProps) => {
           </div>
 
           {/* Table component */}
+          <Table products={products} />
 
           <button>Subscribe</button>
         </div>

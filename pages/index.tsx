@@ -22,7 +22,6 @@ export const getServerSideProps: GetServerSideProps = async () => {
     .catch((error) => console.log(error.message))
   // fetch the api
 
-  console.log('prop', products)
   const [
     netflixOriginals,
     trendingNow,
@@ -82,7 +81,6 @@ const Home = ({
   products,
 }: NetFlixProps) => {
   const { logout, loading } = useAuth()
-  console.log('products', products)
 
   const showModal = useRecoilValue(modalState)
   const subscrption = false
