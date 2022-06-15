@@ -1,9 +1,14 @@
 import { CheckIcon } from '@heroicons/react/outline'
+import { Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
 import Link from 'next/link'
 import useAuth from '../hooks/useAuth'
 
-const Plans = () => {
+interface PlanProps {
+  products: Product[]
+}
+
+const Plans = ({ products }: PlanProps) => {
   const { logout } = useAuth()
 
   return (
@@ -54,10 +59,14 @@ const Plans = () => {
         <div className="mt-4 flex flex-col space-y-4">
           <div className="flex w-full items-center justify-center self-end md:w-3/5">
             {/* plans */}
-            <div className="planBox">Standard</div>
-            <div className="planBox">Standard</div>
-            <div className="planBox">Standard</div>
+            {products.map((product) => (
+              <div className="planBox" key={product.id}>
+                {product.name}
+              </div>
+            ))}
           </div>
+
+          {/* Table component */}
 
           <button>Subscribe</button>
         </div>

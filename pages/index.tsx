@@ -90,7 +90,7 @@ const Home = ({
   // Have a subscription that checks authentication
   if (loading || subscrption === null) return null
 
-  if (!subscrption) return <Plans />
+  if (!subscrption) return <Plans products={products} />
 
   return (
     // gradient to bottom
