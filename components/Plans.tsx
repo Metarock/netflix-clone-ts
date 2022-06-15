@@ -2,6 +2,7 @@ import { CheckIcon } from '@heroicons/react/outline'
 import { Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useState } from 'react'
 import useAuth from '../hooks/useAuth'
 import Table from './Table'
 
@@ -11,6 +12,10 @@ interface PlanProps {
 
 const Plans = ({ products }: PlanProps) => {
   const { logout } = useAuth()
+
+  // accept a single product
+  // by default we want the best(last) plan to be select4ed
+  const [selectedPlan, setSelectedPlan] = useState<Product | null>(products[2])
 
   return (
     <div>
@@ -61,7 +66,13 @@ const Plans = ({ products }: PlanProps) => {
           <div className="flex w-full items-center justify-center self-end md:w-3/5">
             {/* plans */}
             {products.map((product) => (
-              <div className="planBox" key={product.id}>
+              <div
+                className={`planBox ${
+                  selectedPlan?.id === product.id ? 'opacity-100' : 'opacity-60'
+                }`}
+                onClick={() => setSelectedPlan(product)}
+                key={product.id}
+              >
                 {product.name}
               </div>
             ))}
