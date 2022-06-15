@@ -53,9 +53,7 @@ const Plans = () => {
         {/* The plans */}
         <div className="mt-4 flex flex-col space-y-4">
           <div className="flex w-full items-center justify-center self-end md:w-3/5">
-            {/* plan */}
-            {/* plan */}
-            {/* plan */}
+            {/* plans */}
             <div className="planBox">Standard</div>
             <div className="planBox">Standard</div>
             <div className="planBox">Standard</div>
