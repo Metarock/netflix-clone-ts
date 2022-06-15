@@ -43,10 +43,12 @@
     @apply flex flex-wrap items-center font-medium;
   }
 
+  /* on a medium screen we want to take in 60% in width */
   .tableDataFeature {
     @apply w-[calc(100%/3)] p-2.5 text-center md:w-[calc(60%/3)] md:p-3.5;
   }
 
+  /* on a medium screen we want to take in 40% in width */
   .tableDataTitle {
     @apply w-full p-2.5 text-center text-sm font-normal text-white md:w-2/5 md:p-3.5 md:text-left md:text-base;
   }

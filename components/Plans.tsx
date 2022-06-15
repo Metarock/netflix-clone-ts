@@ -79,7 +79,7 @@ const Plans = ({ products }: PlanProps) => {
           </div>
 
           {/* Table component */}
-          <Table products={products} />
+          <Table products={products} selectedPlan={selectedPlan} />
 
           <button>Subscribe</button>
         </div>
