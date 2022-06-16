@@ -5,6 +5,7 @@ import { useRecoilValue } from 'recoil'
 import { modalState } from '../atoms/modalAtom'
 import { Banner, Header, Modal, Plans, Row } from '../components'
 import useAuth from '../hooks/useAuth'
+import userSubscription from '../hooks/userSubscription'
 import payments from '../lib/stripe'
 import { Movie } from '../typings'
 import requests from './api/requests'
@@ -80,15 +81,14 @@ const Home = ({
   documentaries,
   products,
 }: NetFlixProps) => {
-  const { logout, loading } = useAuth()
-
+  const { logout, loading, user } = useAuth()
+  const subscription = userSubscription(user)
   const showModal = useRecoilValue(modalState)
-  const subscrption = false
 
   // Have a subscription that checks authentication
-  if (loading || subscrption === null) return null
+  if (loading || subscription === null) return null
 
-  if (!subscrption) return <Plans products={products} />
+  if (!subscription) return <Plans products={products} />
 
   return (
     // gradient to bottom
