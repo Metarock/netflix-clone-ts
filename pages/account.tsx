@@ -26,7 +26,7 @@ export const getStaticProps: GetStaticProps = async () => {
 }
 
 const Account = ({ products }: AccountProps) => {
-  const { user } = useAuth()
+  const { user, logout } = useAuth()
   const subscription = userSubscription(user)
 
   console.log('products', products)
@@ -78,10 +78,22 @@ const Account = ({ products }: AccountProps) => {
               //  to the user's subscribed product
               products.filter(
                 (product) => product.id === subscription?.product
-              )[0].name
+              )[0]?.name
             }
           </div>
-          <p className="cursor-pointer">Change Plan</p>
+          {/* when we go on bigger screen we want texts to be on the right side  */}
+          <p className="cursor-pointer text-blue-500 hover:underline md:text-right">
+            Change Plan
+          </p>
+        </div>
+        <div className="mt-6 grid grid-cols-1 gap-x-4 border px-4 py-4 md:grid-cols-4 md:border-x-0 md:border-t md:border-b-0 md:px-0 md:pb-0">
+          <h4 className="text-lg text-[gray]">Settings</h4>
+          <p
+            className="col-span-3 cursor-pointer text-blue-500 hover:underline "
+            onClick={logout}
+          >
+            Sign out of all devices
+          </p>
         </div>
       </main>
     </div>
