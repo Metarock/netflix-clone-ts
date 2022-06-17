@@ -25,5 +25,22 @@ const loadCheckout = async (priceId: string) => {
     .catch((err) => console.log(err.message))
 }
 
-export { loadCheckout }
+const userBillingPortal = async () => {
+  const instance = getFunctions(app, 'us-central1')
+
+  // returns a url which is the user billing portal based on the cloud function reference
+  const functionRef = httpsCallable(
+    instance,
+    'ext-firestore-stripe-payments-createPortalLink'
+  )
+
+  // If user pays successful, redirect them back to the account page based on the current domain
+  await functionRef({
+    returnUrl: `${window.location.origin}/account`,
+  })
+    .then(({ data }: any) => window.location.assign(data.url))
+    .catch((error) => console.log(error.message))
+}
+
+export { loadCheckout, userBillingPortal }
 export default payments

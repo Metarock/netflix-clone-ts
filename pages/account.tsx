@@ -2,6 +2,7 @@ import { getProducts, Product } from '@stripe/firestore-stripe-payments'
 import { GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import Membership from '../components/Membership'
 import useAuth from '../hooks/useAuth'
 import userSubscription from '../hooks/userSubscription'
 import payments from '../lib/stripe'
@@ -29,8 +30,6 @@ const Account = ({ products }: AccountProps) => {
   const { user, logout } = useAuth()
   const subscription = userSubscription(user)
 
-  console.log('products', products)
-  console.log('subscription', subscription)
   return (
     <div>
       <Head>
@@ -68,6 +67,7 @@ const Account = ({ products }: AccountProps) => {
         </div>
 
         {/* Membership component */}
+        <Membership />
 
         <div className="mt-6 grid grid-cols-1 gap-x-4 border px-4 py-4 md:grid-cols-4 md:border-x-0 md:border-t md:border-b-0 md:px-0 md:pb-0">
           <h4>Plan Details</h4>
