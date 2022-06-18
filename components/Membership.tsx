@@ -36,6 +36,39 @@ const Membership = () => {
           )}
         </button>
       </div>
+
+      {/* TODO : ADD functionality to membership links, for now its static */}
+      <div className="col-span-3">
+        <div className="flex flex-col justify-between border-b border-white/10 py-4 md:flex-row">
+          <div>
+            <p className="font-medium">{user?.email}</p>
+            <p className="text-[gray]">Password: ********</p>
+          </div>
+          <div className="md:text-right">
+            <p className="membershipLink">Change Email</p>
+            <p className="membershipLink">Change Password</p>
+          </div>
+        </div>
+
+        <div className="flex flex-col justify-between pt-4 pb-4 md:flex-row md:pb-0">
+          <div>
+            <p>
+              {subscription?.cancel_at_period_end
+                ? 'Your subscription will end on '
+                : 'Your next billing data is'}{' '}
+              {subscription?.current_period_end}
+            </p>
+          </div>
+          <div className="md:text-right">
+            <p className="membershipLink">Manage Payment Info</p>
+            <p className="membershipLink">Add Another Payment Method</p>
+            <p className="membershipLink">Billing Details</p>
+            <p className="membershipLink">Change Billing Day</p>
+            <p></p>
+            <p></p>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

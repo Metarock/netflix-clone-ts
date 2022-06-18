@@ -5,7 +5,7 @@ import Link from 'next/link'
 import Membership from '../components/Membership'
 import useAuth from '../hooks/useAuth'
 import userSubscription from '../hooks/userSubscription'
-import payments from '../lib/stripe'
+import payments, { userBillingPortal } from '../lib/stripe'
 
 interface AccountProps {
   products: Product[]
@@ -70,7 +70,7 @@ const Account = ({ products }: AccountProps) => {
         <Membership />
 
         <div className="mt-6 grid grid-cols-1 gap-x-4 border px-4 py-4 md:grid-cols-4 md:border-x-0 md:border-t md:border-b-0 md:px-0 md:pb-0">
-          <h4>Plan Details</h4>
+          <h4 className="text-lg text-[gray]">Plan Details</h4>
           {/* Find the current plan */}
           <div className="cols-span-2 font-medium">
             {
@@ -82,7 +82,10 @@ const Account = ({ products }: AccountProps) => {
             }
           </div>
           {/* when we go on bigger screen we want texts to be on the right side  */}
-          <p className="cursor-pointer text-blue-500 hover:underline md:text-right">
+          <p
+            className="cursor-pointer text-blue-500 hover:underline md:text-right"
+            onClick={userBillingPortal}
+          >
             Change Plan
           </p>
         </div>

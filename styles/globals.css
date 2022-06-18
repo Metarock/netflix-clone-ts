@@ -52,4 +52,18 @@
   .tableDataTitle {
     @apply w-full p-2.5 text-center text-sm font-normal text-white md:w-2/5 md:p-3.5 md:text-left md:text-base;
   }
+
+  /* Membership */
+  .membershipLink {
+    @apply cursor-pointer text-blue-500 hover:underline;
+  }
+
+  /* MUI Menu */
+  .menu {
+    @apply md:hidden;
+  }
+
+  .menu .MuiPaper-root {
+    @apply !absolute !left-0 !rounded-none !border !border-[gray] !bg-black !text-white;
+  }
 }
