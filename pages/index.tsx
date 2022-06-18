@@ -2,9 +2,10 @@ import { getProducts, Product } from '@stripe/firestore-stripe-payments'
 import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRecoilValue } from 'recoil'
-import { modalState } from '../atoms/modalAtom'
+import { modalState, movieState } from '../atoms/modalAtom'
 import { Banner, Header, Modal, Plans, Row } from '../components'
 import useAuth from '../hooks/useAuth'
+import userCustomList from '../hooks/userCustomList'
 import userSubscription from '../hooks/userSubscription'
 import payments from '../lib/stripe'
 import { Movie } from '../typings'
@@ -81,9 +82,11 @@ const Home = ({
   documentaries,
   products,
 }: NetFlixProps) => {
-  const { logout, loading, user } = useAuth()
+  const { loading, user } = useAuth()
   const subscription = userSubscription(user)
   const showModal = useRecoilValue(modalState)
+  const movie = useRecoilValue(movieState)
+  const list = userCustomList(user?.uid)
 
   // Have a subscription that checks authentication
   if (loading || subscription === null) return null
@@ -108,6 +111,7 @@ const Home = ({
           <Row title="Top Rated" movies={topRated} />
           <Row title="Action Thrillers" movies={actionMovies} />
           {/* My List component */}
+          {list.length > 0 && <Row title="My List" movies={list} />}
           <Row title="Comedies" movies={comedyMovies} />
           <Row title="Horror Films" movies={horrorMovies} />
           <Row title="Romance" movies={romanceMovies} />
