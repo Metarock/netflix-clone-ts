@@ -1,6 +1,7 @@
 import { BellIcon, SearchIcon } from '@heroicons/react/solid'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { CustomMenu } from '.'
 import useAuth from '../hooks/useAuth'
 
 // Wont need to import react for nextjs
@@ -40,6 +41,9 @@ const Header = () => {
           height={100}
           className="cursor-pointer object-contain"
         />
+
+        {/* Menu component */}
+        <CustomMenu />
 
         {/* Hide the navbars when on mobile */}
         <ul className="hidden space-x-4 md:flex">
