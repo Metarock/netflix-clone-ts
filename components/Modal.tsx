@@ -1,4 +1,5 @@
 import {
+  CheckIcon,
   PlusIcon,
   ThumbUpIcon,
   VolumeOffIcon,
@@ -6,19 +7,43 @@ import {
   XIcon,
 } from '@heroicons/react/outline'
 import MuiModal from '@mui/material/Modal'
+import {
+  collection,
+  deleteDoc,
+  doc,
+  DocumentData,
+  onSnapshot,
+  setDoc,
+} from 'firebase/firestore'
 import { useEffect, useState } from 'react'
+import toast, { Toaster } from 'react-hot-toast'
 import { FaPlay } from 'react-icons/fa'
 import ReactPlayer from 'react-player/lazy'
 import { useRecoilState } from 'recoil'
 import { modalState, movieState } from '../atoms/modalAtom'
-import { Element, Genre } from '../typings'
+import { db } from '../firebase'
+import useAuth from '../hooks/useAuth'
+import { Element, Genre, Movie } from '../typings'
 
 const Modal = () => {
+  const { user } = useAuth()
   const [showModal, setShowModal] = useRecoilState(modalState)
   const [movie, setMovie] = useRecoilState(movieState)
   const [trailer, setTrailer] = useState<string>('')
   const [genres, setGenres] = useState<Genre[]>([])
   const [muted, setMuted] = useState<boolean>(true)
+  const [addedToList, setAddedToList] = useState<boolean>(false)
+  const [movies, setMovies] = useState<Movie[] | DocumentData[]>([])
+
+  const toastStyle = {
+    background: 'white',
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: '16px',
+    padding: '15px',
+    borderRadius: '9999px',
+    maxWidth: '1000px',
+  }
 
   //   This gets the movie on load
   useEffect(() => {
@@ -47,9 +72,65 @@ const Modal = () => {
     }
     fetchMovies()
   }, [movie])
+
+  // Find all movies in the user's list
+  useEffect(() => {
+    if (user) {
+      return onSnapshot(
+        collection(db, 'customers', user.uid, 'myList'),
+        (snapshot) => setMovies(snapshot.docs)
+      )
+    }
+  }, [db, movie?.id])
+
+  // Check if the movie is already in the user's list
+  useEffect(() => {
+    setAddedToList(
+      // -1 means if its not found
+      // this is ensuring that index is found
+      movies.findIndex((result) => result.data().id === movie?.id) !== -1
+    )
+  }, [movies])
+
   const handleClose = () => {
     setShowModal(false)
     setMovie(null)
+  }
+
+  /**
+   * IF YOU ARE GETTING PERMISSION ERROR, ADD THIS RULE
+   *
+   *  match/myList/{id} {
+   *  allow read, write: if request.auth.uid == uid
+   * }
+   */
+  const handleList = async () => {
+    if (addedToList) {
+      // delete the collection based on the user uid
+      await deleteDoc(
+        doc(db, 'customers', user!.uid, 'myList', movie?.id.toString()!)
+      )
+
+      toast(
+        `${
+          movie?.title || movie?.original_name
+        } has been remmoved from My List`,
+        { duration: 8000, style: toastStyle }
+      )
+    } else {
+      // create the collection based on the user id
+      await setDoc(
+        doc(db, 'customers', user!.uid, 'myList', movie?.id.toString()!),
+        {
+          ...movie,
+        }
+      )
+
+      toast(
+        `${movie?.title || movie?.original_name} has been added to My List`,
+        { duration: 8000, style: toastStyle }
+      )
+    }
   }
 
   console.log(genres)
@@ -60,6 +141,7 @@ const Modal = () => {
       className="fixed !top-7 left-0 right-0 z-50 mx-auto w-full max-w-5xl overflow-hidden overflow-y-scroll rounded-md scrollbar-hide "
     >
       <>
+        <Toaster position="bottom-center" />
         {/* Close Icon */}
         <button
           onClick={handleClose}
@@ -84,8 +166,12 @@ const Modal = () => {
                 <FaPlay className="h-7 w-7 text-black" />
                 Play
               </button>
-              <button className="modalButton">
-                <PlusIcon className="h-7 w-7" />
+              <button className="modalButton" onClick={handleList}>
+                {addedToList ? (
+                  <CheckIcon className="h-7 w-7" />
+                ) : (
+                  <PlusIcon className="h-7 w-7" />
+                )}
               </button>
               <button className="modalButton">
                 <ThumbUpIcon className="h-6 w-6" />

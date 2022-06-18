@@ -1,10 +1,42 @@
 import { CheckIcon } from '@heroicons/react/outline'
+import { Product } from '@stripe/firestore-stripe-payments'
 import Head from 'next/head'
 import Link from 'next/link'
+import { useState } from 'react'
+import { Loader } from '.'
 import useAuth from '../hooks/useAuth'
+import { loadCheckout } from '../lib/stripe'
+import Table from './Table'
 
-const Plans = () => {
-  const { logout } = useAuth()
+interface PlanProps {
+  products: Product[]
+}
+
+const Plans = ({ products }: PlanProps) => {
+  const { logout, user } = useAuth()
+
+  // accept a single product
+  // by default we want the best(last) plan to be select4ed
+  const [selectedPlan, setSelectedPlan] = useState<Product | null>(products[2])
+  const [isBillingLoading, setIsBillingLoading] = useState<boolean>(false)
+
+  // function
+  const subscribeToPlan = () => {
+    // if there is no user
+    if (!user) return
+
+    const priceId = selectedPlan?.prices[0].id
+
+    // if id is null / undefined
+    if (!priceId) {
+      throw new Error('Plan price is called but id is null')
+    }
+
+    loadCheckout(priceId)
+
+    // set the loading state to true
+    setIsBillingLoading(true)
+  }
 
   return (
     <div>
@@ -53,15 +85,37 @@ const Plans = () => {
         {/* The plans */}
         <div className="mt-4 flex flex-col space-y-4">
           <div className="flex w-full items-center justify-center self-end md:w-3/5">
-            {/* plan */}
-            {/* plan */}
-            {/* plan */}
-            <div className="planBox">Standard</div>
-            <div className="planBox">Standard</div>
-            <div className="planBox">Standard</div>
+            {/* plans */}
+            {products.map((product) => (
+              <div
+                className={`planBox ${
+                  selectedPlan?.id === product.id ? 'opacity-100' : 'opacity-60'
+                }`}
+                onClick={() => setSelectedPlan(product)}
+                key={product.id}
+              >
+                {product.name}
+              </div>
+            ))}
           </div>
 
-          <button>Subscribe</button>
+          {/* Table component */}
+          <Table products={products} selectedPlan={selectedPlan} />
+
+          <button
+            disabled={!selectedPlan || isBillingLoading}
+            className={`mx-auto w-11/12 rounded bg-[#E50914] py-4 text-xl shadow hover:bg-[#f6121d] md:w-[420px] ${
+              isBillingLoading && 'opacity-60'
+            }`}
+            onClick={subscribeToPlan}
+          >
+            {/* show loading bar  */}
+            {isBillingLoading ? (
+              <Loader color="dark:fill-gray-300" />
+            ) : (
+              'Subscribe'
+            )}
+          </button>
         </div>
       </main>
     </div>

@@ -1,14 +1,29 @@
+import { getProducts, Product } from '@stripe/firestore-stripe-payments'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
 import { useRecoilValue } from 'recoil'
-import { modalState } from '../atoms/modalAtom'
+import { modalState, movieState } from '../atoms/modalAtom'
 import { Banner, Header, Modal, Plans, Row } from '../components'
 import useAuth from '../hooks/useAuth'
+import userCustomList from '../hooks/userCustomList'
+import userSubscription from '../hooks/userSubscription'
+import payments from '../lib/stripe'
 import { Movie } from '../typings'
 import requests from './api/requests'
 
 // server side rendering, NAMING IS IMPORTANT
-export const getServerSideProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
+  // only give active plans
+  // NOTE: WE NEED TO USE next-transpile-modules, as nextjs as hot reloading
+  // meaning nextjs is not transpiling node modules correctly
+  const products = await getProducts(payments, {
+    includePrices: true,
+    activeOnly: true,
+  })
+    .then((res) => res)
+    .catch((error) => console.log(error.message))
   // fetch the api
+
   const [
     netflixOriginals,
     trendingNow,
@@ -39,6 +54,7 @@ export const getServerSideProps = async () => {
       horrorMovies: horrorMovies.results,
       romanceMovies: romanceMovies.results,
       documentaries: documentaries.results,
+      products,
     },
   }
 }
@@ -52,6 +68,7 @@ interface NetFlixProps {
   horrorMovies: Movie[]
   romanceMovies: Movie[]
   documentaries: Movie[]
+  products: Product[]
 }
 
 const Home = ({
@@ -63,16 +80,18 @@ const Home = ({
   horrorMovies,
   romanceMovies,
   documentaries,
+  products,
 }: NetFlixProps) => {
-  const { logout, loading } = useAuth()
-
+  const { loading, user } = useAuth()
+  const subscription = userSubscription(user)
   const showModal = useRecoilValue(modalState)
-  const subscrption = false
+  const movie = useRecoilValue(movieState)
+  const list = userCustomList(user?.uid)
 
   // Have a subscription that checks authentication
-  if (loading || subscrption === null) return null
+  if (loading || subscription === null) return null
 
-  if (!subscrption) return <Plans />
+  if (!subscription) return <Plans products={products} />
 
   return (
     // gradient to bottom
@@ -92,6 +111,7 @@ const Home = ({
           <Row title="Top Rated" movies={topRated} />
           <Row title="Action Thrillers" movies={actionMovies} />
           {/* My List component */}
+          {list.length > 0 && <Row title="My List" movies={list} />}
           <Row title="Comedies" movies={comedyMovies} />
           <Row title="Horror Films" movies={horrorMovies} />
           <Row title="Romance" movies={romanceMovies} />
